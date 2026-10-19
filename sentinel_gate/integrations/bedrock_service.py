@@ -108,7 +108,7 @@ class BedrockService:
         # Suggest safe replacement based on violation type
         if "DB_CONNECTION_STRING" in matched_rule or "postgres" in prompt_snippet.lower():
             safe_alt = "Replace the raw connection string with an environment variable reference (e.g., $DATABASE_URL or os.environ['DB_PASSWORD'])."
-            sanitized_mock = 'postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:5432/${DB_NAME}'
+            sanitized_mock = 'postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:5432/$DB_NAME'
         elif "AWS_ACCESS_KEY" in matched_rule:
             safe_alt = "Use AWS IAM Roles for EC2/ECS/Lambda or AWS Secrets Manager rather than embedding static AWS credentials."
             sanitized_mock = 'client = boto3.client("s3") # Assumes IAM execution role credentials'

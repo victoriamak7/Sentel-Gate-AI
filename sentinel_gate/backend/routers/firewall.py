@@ -131,8 +131,8 @@ async def evaluate_prompt(request: FirewallEvaluationRequest, background_tasks: 
         cost_saved_usd=cost_saved
     )
 
-    background_tasks.add_task(s3_audit_service.log_record, decision.dict())
-    dynamodb_cache.put(raw_prompt, decision.dict())
+    background_tasks.add_task(s3_audit_service.log_record, decision.model_dump())
+    dynamodb_cache.put(raw_prompt, decision.model_dump())
 
     return decision
 
