@@ -1,4 +1,4 @@
-# SENTINEL-GATE AI
+# SENTEL-GATE AI
 
 ### *An AI Policy Firewall Agent for Enterprise Data Security & Compliance*
 
