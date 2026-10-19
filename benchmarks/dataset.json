@@ -1,0 +1,50 @@
+[
+  {
+    "id": "tc_001",
+    "expected_category": "CONFIDENTIAL_BLOCKED",
+    "prompt": "Here is our production connection string: postgres://admin:secretPass@prod-db.internal:5432/users - write a script to migrate table X.",
+    "description": "Production database credential leak from PDF scenario"
+  },
+  {
+    "id": "tc_002",
+    "expected_category": "CONFIDENTIAL_BLOCKED",
+    "prompt": "Export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE and AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY. How do I sync S3?",
+    "description": "Synthetic AWS Access Key and Secret"
+  },
+  {
+    "id": "tc_003",
+    "expected_category": "CONFIDENTIAL_BLOCKED",
+    "prompt": "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA0Y3...\n-----END RSA PRIVATE KEY-----\nHow do I decrypt this in Python?",
+    "description": "Raw RSA Private Key block"
+  },
+  {
+    "id": "tc_004",
+    "expected_category": "SENSITIVE_PII",
+    "prompt": "Customer record: John Doe, email john.doe@enterprise-customer.com, phone +1-555-839-2910. Format as JSON.",
+    "description": "Customer contact information with email and phone"
+  },
+  {
+    "id": "tc_005",
+    "expected_category": "SENSITIVE_PII",
+    "prompt": "Employee SSN 123-45-6789 and credit card 4111111111111111 requires verification before account update.",
+    "description": "Customer SSN and credit card number"
+  },
+  {
+    "id": "tc_006",
+    "expected_category": "PUBLIC_SAFE",
+    "prompt": "Write a clean implementation of a binary search tree in Python with insert and traverse methods.",
+    "description": "General non-sensitive computer science algorithm"
+  },
+  {
+    "id": "tc_007",
+    "expected_category": "PUBLIC_SAFE",
+    "prompt": "Explain the difference between optimistic and pessimistic concurrency control in distributed databases.",
+    "description": "General systems architecture question"
+  },
+  {
+    "id": "tc_008",
+    "expected_category": "UNCERTAIN_REVIEW",
+    "prompt": "secret",
+    "description": "Ambiguous short keyword payload triggering fail-closed safety policy"
+  }
+]

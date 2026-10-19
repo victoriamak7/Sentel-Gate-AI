@@ -1,0 +1,31 @@
+FROM python:3.11-slim AS builder
+
+WORKDIR /app
+
+# Install build essentials for C++20 engine
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    cmake \
+    g++ \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt pyproject.toml ./
+RUN pip install --no-cache-dir -r requirements.txt pybind11
+
+COPY cpp_engine ./cpp_engine
+COPY sentinel_gate ./sentinel_gate
+
+# Build C++20 Zero-Copy Pattern Engine
+WORKDIR /app/cpp_engine
+RUN mkdir build && cd build && \
+    cmake .. -DCMAKE_BUILD_TYPE=Release && \
+    cmake --build . --config Release
+
+WORKDIR /app
+
+EXPOSE 8000
+
+ENV PYTHONUNBUFFERED=1
+
+CMD ["uvicorn", "sentinel_gate.backend.main:app", "--host", "0.0.0.0", "--port", "8000"]

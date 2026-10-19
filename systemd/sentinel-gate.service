@@ -1,0 +1,17 @@
+[Unit]
+Description=Sentinel-Gate AI Policy Firewall Service
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/opt/sentinel-gate-ai
+ExecStart=/opt/sentinel-gate-ai/.venv/bin/uvicorn sentinel_gate.backend.main:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=3
+Environment=PYTHONUNBUFFERED=1
+Environment=SENTINEL_ENV=production
+Environment=AWS_DEFAULT_REGION=us-east-1
+
+[Install]
+WantedBy=multi-user.target

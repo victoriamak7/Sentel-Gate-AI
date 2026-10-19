@@ -1,0 +1,59 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "BedrockInvokeModelLeastPrivilege",
+      "Effect": "Allow",
+      "Action": [
+        "bedrock:InvokeModel",
+        "bedrock:InvokeModelWithResponseStream"
+      ],
+      "Resource": [
+        "arn:aws:bedrock:*::foundation-model/anthropic.claude-3-haiku*",
+        "arn:aws:bedrock:*::foundation-model/anthropic.claude-3-sonnet*",
+        "arn:aws:bedrock:*::foundation-model/amazon.nova*",
+        "arn:aws:bedrock:*::foundation-model/amazon.titan*"
+      ]
+    },
+    {
+      "Sid": "CloudWatchMetricsPut",
+      "Effect": "Allow",
+      "Action": [
+        "cloudwatch:PutMetricData"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "cloudwatch:namespace": "SentinelGate/PolicyFirewall"
+        }
+      }
+    },
+    {
+      "Sid": "DynamoDBCacheAccess",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem"
+      ],
+      "Resource": "arn:aws:dynamodb:*:*:table/SentinelPolicyCache"
+    },
+    {
+      "Sid": "S3AuditLogsPut",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObject"
+      ],
+      "Resource": "arn:aws:s3:::sentinel-gate-audit-logs/*"
+    },
+    {
+      "Sid": "SNSSecurityAlertPublish",
+      "Effect": "Allow",
+      "Action": [
+        "sns:Publish"
+      ],
+      "Resource": "arn:aws:sns:*:*:SentinelGate-SecurityAlerts"
+    }
+  ]
+}

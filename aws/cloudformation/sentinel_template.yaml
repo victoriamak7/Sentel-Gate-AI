@@ -1,0 +1,102 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Sentinel-Gate AI - Infrastructure Template for AWS Bedrock, DynamoDB, S3, SNS, and CloudWatch'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: prod
+    AllowedValues: [dev, staging, prod]
+    Description: Environment stage name
+
+Resources:
+  # 1. DynamoDB Prompt Decision Cache
+  SentinelPolicyCacheTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub 'SentinelPolicyCache-${Environment}'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: prompt_hash
+          AttributeType: S
+      KeySchema:
+        - AttributeName: prompt_hash
+          KeyType: HASH
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+      Tags:
+        - Key: Project
+          Value: Sentinel-Gate-AI
+
+  # 2. S3 Audit Bucket for Compliance Logs
+  SentinelAuditBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'sentinel-gate-audit-logs-${AWS::AccountId}-${Environment}'
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  # 3. SNS Topic for Security Alerts
+  SentinelSecurityAlertsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub 'SentinelGate-SecurityAlerts-${Environment}'
+      DisplayName: 'Sentinel-Gate AI Credential Alerts'
+
+  # 4. IAM Execution Role
+  SentinelExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub 'SentinelGateExecutionRole-${Environment}'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+                - ecs-tasks.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: SentinelLeastPrivilegePolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'bedrock:InvokeModel'
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 'cloudwatch:PutMetricData'
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 'dynamodb:GetItem'
+                  - 'dynamodb:PutItem'
+                Resource: !GetAtt SentinelPolicyCacheTable.Arn
+              - Effect: Allow
+                Action:
+                  - 's3:PutObject'
+                Resource: !Sub '${SentinelAuditBucket.Arn}/*'
+              - Effect: Allow
+                Action:
+                  - 'sns:Publish'
+                Resource: !Ref SentinelSecurityAlertsTopic
+
+Outputs:
+  DynamoDBTableName:
+    Value: !Ref SentinelPolicyCacheTable
+  S3AuditBucketName:
+    Value: !Ref SentinelAuditBucket
+  SNSTopicArn:
+    Value: !Ref SentinelSecurityAlertsTopic
+  ExecutionRoleArn:
+    Value: !GetAtt SentinelExecutionRole.Arn

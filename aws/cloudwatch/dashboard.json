@@ -1,0 +1,90 @@
+{
+  "widgets": [
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 0,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          [ "SentinelGate/PolicyFirewall", "DeciderLatency", "Category", "CONFIDENTIAL_BLOCKED", { "stat": "Average", "color": "#d62728" } ],
+          [ "...", "PUBLIC_SAFE", { "stat": "Average", "color": "#2ca02c" } ],
+          [ "...", "SENSITIVE_PII", { "stat": "Average", "color": "#ff7f0e" } ],
+          [ "...", "UNCERTAIN_REVIEW", { "stat": "Average", "color": "#9467bd" } ]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "us-east-1",
+        "title": "Decider 2B Execution Latency by Category (~115ms)",
+        "period": 60,
+        "yAxis": {
+          "left": {
+            "label": "Milliseconds",
+            "min": 0,
+            "max": 250
+          }
+        }
+      }
+    },
+    {
+      "type": "metric",
+      "x": 12,
+      "y": 0,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          [ "SentinelGate/PolicyFirewall", "PolicyDecisionCount", "Category", "CONFIDENTIAL_BLOCKED", { "stat": "Sum", "color": "#d62728" } ],
+          [ "...", "SENSITIVE_PII", { "stat": "Sum", "color": "#ff7f0e" } ],
+          [ "...", "PUBLIC_SAFE", { "stat": "Sum", "color": "#2ca02c" } ],
+          [ "...", "UNCERTAIN_REVIEW", { "stat": "Sum", "color": "#9467bd" } ]
+        ],
+        "view": "timeSeries",
+        "stacked": true,
+        "region": "us-east-1",
+        "title": "Policy Classifications Ingested (Throughput)",
+        "period": 60
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 6,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          [ "SentinelGate/PolicyFirewall", "TokenCostSavedUSD", { "stat": "Sum", "color": "#1f77b4" } ]
+        ],
+        "view": "singleValue",
+        "region": "us-east-1",
+        "title": "Cumulative Frontier LLM Cost Saved (USD)",
+        "period": 300
+      }
+    },
+    {
+      "type": "metric",
+      "x": 12,
+      "y": 6,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          [ "SentinelGate/PolicyFirewall", "ConfidenceScore", "Category", "CONFIDENTIAL_BLOCKED", { "stat": "Average" } ],
+          [ "...", "PUBLIC_SAFE", { "stat": "Average" } ]
+        ],
+        "view": "timeSeries",
+        "region": "us-east-1",
+        "title": "Average Policy Decision Confidence Score (%)",
+        "period": 60,
+        "yAxis": {
+          "left": {
+            "min": 50,
+            "max": 100
+          }
+        }
+      }
+    }
+  ]
+}
