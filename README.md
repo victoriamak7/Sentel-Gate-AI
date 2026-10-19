@@ -231,16 +231,6 @@ sentinel-gate-ai/
 
 ---
 
-## ✅ Hackathon Submission Checklist
-
-- [x] **Working agent using Strands Decider 2B and Amazon Bedrock.**
-- [x] **Public GitHub repository containing source code and a reusable decision pattern.**
-- [x] **Builder Center article explaining the agent, the policy decision, and measured benchmarks** (`docs/BUILDER_CENTER_ARTICLE.md`).
-- [x] **Public demo video script shorter than 3 minutes demonstrating the 115ms triage in action** (`docs/DEMO_VIDEO_SCRIPT.md`).
-- [x] **Required tags included**: `#strands-decider-2b` and `#policy`.
-- [x] **Original, unpublished application.**
-
----
 
 ## 📄 License
 
